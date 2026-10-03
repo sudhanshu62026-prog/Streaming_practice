@@ -129,7 +129,29 @@ class Podcast(MediaItem):
             (self.episodes_listened / self.total_episodes) * 100, 1
 
         ) if self.total_episodes > 0 else 0.0
-        
+    
+    def to_dict(self):
+        data = super().to_dict()
+        data.update({
+            "total_episodes" : self.total_episodes,
+            "episodes_listened" : self.episodes_listened,
+            "avg_episode_minutes" : self.avg_episode_minutes   
+        })
+        return data
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> "Podcast":
+            return cls(
+                   id = data["id"],
+                   title = data["title"],
+                   genre = data["genre"],
+                   platform = data["platform"],
+                   status = WatchStatus(data["status"]),
+                   rating = data.get("rating"),
+                   total_episodes = data.get("total_episodes"),
+                   episodes_listened = data.get("episodes_listened"),
+                   avg_episode_minutes = data.get("avg_episode_minutes")         
+            )
 
 
 s1 = Series(2,"Panchayat", "Comedy","Prime", episodes_watched=3)
